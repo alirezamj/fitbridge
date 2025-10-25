@@ -1,0 +1,14 @@
+{
+  "tags": {
+    "allowUnknownTags": true
+  },
+  "source": {
+    "include": ["controllers", "helpers", "models"],
+    "includePattern": ".js$",
+    "excludePattern": "(node_modules|routes)"
+  },
+  "opts": {
+    "destination": "./docs",
+    "recurse": true
+  }
+}
