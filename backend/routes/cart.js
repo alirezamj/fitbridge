@@ -12,7 +12,7 @@
 
 const express = require('express');
 const router = express.Router();
-const { requireAuth } = require('../middlewares/authMiddleware');
+const authMiddleware = require('../middlewares/authMiddleware');
 const {
   getCart,
   addToCart,
@@ -36,7 +36,7 @@ const {
  *       500:
  *         $ref: '#/components/responses/ServerError'
  */
-router.get('/', requireAuth, getCart);
+router.get('/', authMiddleware, getCart);
 
 /**
  * @swagger
@@ -74,7 +74,7 @@ router.get('/', requireAuth, getCart);
  *       500:
  *         $ref: '#/components/responses/ServerError'
  */
-router.post('/add', requireAuth, addToCart);
+router.post('/add', authMiddleware, addToCart);
 
 /**
  * @swagger
@@ -112,7 +112,7 @@ router.post('/add', requireAuth, addToCart);
  *       500:
  *         $ref: '#/components/responses/ServerError'
  */
-router.put('/update', requireAuth, updateCartItem);
+router.put('/update', authMiddleware, updateCartItem);
 
 /**
  * @swagger
@@ -136,6 +136,6 @@ router.put('/update', requireAuth, updateCartItem);
  *       500:
  *         $ref: '#/components/responses/ServerError'
  */
-router.delete('/remove/:productId', requireAuth, removeFromCart);
+router.delete('/remove/:productId', authMiddleware, removeFromCart);
 
 module.exports = router;

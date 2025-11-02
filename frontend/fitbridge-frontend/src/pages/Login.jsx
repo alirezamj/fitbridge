@@ -1,3 +1,4 @@
+import { jwtDecode } from 'jwt-decode';
 import { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import api from '../../src/services/api';
@@ -15,8 +16,20 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await api.post('/api/auth/login', form);
-      login(res.data.token);
-      navigate('/');
+      const token = res.data.token
+      login(token);
+
+      const decoded = jwtDecode(token);
+      console.log('Decoded token:', decoded);
+      const role = decoded.role;
+
+      if(role === 'client') {
+        navigate('/client/onboarding');
+      } else if (role === 'coach') {
+        navigate('/coach/dashboard');
+      } else {
+        setError('Unknown role');
+      }
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed');
     }

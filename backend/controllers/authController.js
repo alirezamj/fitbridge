@@ -3,6 +3,7 @@
  * @description Contains logic for user registration and login
  */
 
+const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const { hashPassword, comparePassword, generateToken } = require('../helpers/auth');
 
@@ -21,7 +22,26 @@ const registerUser = async (req, res) => {
     const hashed = await hashPassword(password);
     const user = await User.create({ name, email, password: hashed, role });
 
-    res.status(201).json({ message: 'User registered successfully' });
+    const generateToken = (user) => {
+      return jwt.sign(
+      { userId: user._id, role: user.role }, // ✅ payload must be an object
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+      );
+    };
+
+    console.log('Incoming register payload:', req.body);
+    
+    const token = generateToken(user);
+    res.status(201).json({
+       token,
+       user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+       } 
+      });
   } catch (err) {
     res.status(500).json({ message: 'Registration failed', error: err.message });
   }

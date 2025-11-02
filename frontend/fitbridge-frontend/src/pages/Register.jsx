@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const Register = () => {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const [form, setForm] = useState({ name: '', email: '', password: '', role:'' });
   const [error, setError] = useState('');
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -14,14 +14,31 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-          console.log('Sending to API:', form);
+      console.log('Submitting form:', form);
       const res = await api.post('/api/auth/register', form);
-          console.log('Response:', res.data);
-      login(res.data.token);
-      navigate('/');
+      const { token, user } = res.data;
+      login(token);
+
+      
+      
+
+      if (user.role === 'client'){
+        navigate('/client/onboarding');
+      } else if (user.role === 'coach'){
+        navigate('/coach/dashboard');
+      } else {
+        navigate('/');
+      }
     } catch (err) {
-      setError(err.response?.data?.error || 'Registration failed');
+      const message =
+        err.response?.data?.error || // custom error format
+        err.response?.data?.message || // fallback if backend uses { message: ... }
+        'Registration failed';
+
+       console.error('Register error:', err.response?.data);
+       setError(message);
     }
+
   };
 
   return (

@@ -12,7 +12,7 @@
 
 const express = require('express');
 const router = express.Router();
-const { requireAuth } = require('../middlewares/authMiddleware');
+const authMiddleware = require('../middlewares/authMiddleware');
 const {
   initiatePayment,
   handlePaymentCallback,
@@ -40,7 +40,7 @@ const {
  *       500:
  *         $ref: '#/components/responses/ServerError'
  */
-router.post('/checkout', requireAuth, initiatePayment);
+router.post('/checkout', authMiddleware, initiatePayment);
 
 /**
  * @swagger
@@ -71,6 +71,6 @@ router.post('/checkout', requireAuth, initiatePayment);
  *       500:
  *         $ref: '#/components/responses/ServerError'
  */
-router.get('/callback', handlePaymentCallback);
+router.get('/callback',authMiddleware, handlePaymentCallback);
 
 module.exports = router;

@@ -14,7 +14,7 @@
 const express = require('express');
 const router = express.Router();
 const { createDietLog, getDietLogs } = require('../controllers/dietController');
-const { requireAuth } = require('../middlewares/authMiddleware');
+const authMiddleware = require('../middlewares/authMiddleware');
 
 /**
  * @swagger
@@ -81,7 +81,7 @@ const { requireAuth } = require('../middlewares/authMiddleware');
  * @route POST /api/diets
  * @desc Create a new diet log
  */
-router.post('/', requireAuth, createDietLog);
+router.post('/', authMiddleware, createDietLog);
 
 
 /**
@@ -113,6 +113,6 @@ router.post('/', requireAuth, createDietLog);
  *         $ref: '#/components/responses/ServerError'
  */
 
-router.get('/', requireAuth, getDietLogs);
+router.get('/', authMiddleware, getDietLogs);
 
 module.exports = router;

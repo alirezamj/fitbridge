@@ -7,6 +7,9 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import CoachDashboard from './pages/CoachDashboard';
+import ClientOnboarding from './pages/ClientOnboarding';
+
 
 
 
@@ -26,7 +29,23 @@ export default function App() {
            <Route path="/" element={<Home />} />
            <Route path="/login" element={<Login />} />
            <Route path="/register" element={<Register />} />
-           <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+           <Route 
+           path="/coach/dashboard"
+           element={
+            <PrivateRoute allowedRoles={['coach']}>
+              <CoachDashboard />
+            </PrivateRoute>
+           }
+           />
+           <Route
+           path="/client/onboarding"
+           element={
+            <PrivateRoute allowedRoles={['client']}>
+              <ClientOnboarding />
+            </PrivateRoute>
+           }
+           />
+           <Route path="/client/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

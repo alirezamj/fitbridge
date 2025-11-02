@@ -1,0 +1,7 @@
+{
+  "github.copilot.advanced": {
+    "authProvider": "github"
+  },
+  "security.workspace.trust.enabled": true,
+  "window.openFoldersInNewWindow": "on"
+}

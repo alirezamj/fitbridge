@@ -13,7 +13,7 @@
 const express = require('express');
 const router = express.Router();
 const { createWorkout, getWorkouts } = require('../controllers/workoutController');
-const { requireAuth } = require('../middlewares/authMiddleware');
+const authMiddleware = require('../middlewares/authMiddleware');
 
 /**
  * @swagger
@@ -80,7 +80,7 @@ const { requireAuth } = require('../middlewares/authMiddleware');
  *       500:
  *         $ref: '#/components/responses/ServerError'
  */
-router.post('/', requireAuth, createWorkout);
+router.post('/', authMiddleware, createWorkout);
 
 /**
  * @swagger
@@ -113,6 +113,6 @@ router.post('/', requireAuth, createWorkout);
  *       500:
  *         $ref: '#/components/responses/ServerError'
  */
-router.get('/', requireAuth, getWorkouts);
+router.get('/', authMiddleware, getWorkouts);
 
 module.exports = router;
