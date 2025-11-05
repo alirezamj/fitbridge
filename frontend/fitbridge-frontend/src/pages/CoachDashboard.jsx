@@ -16,7 +16,7 @@ const CoachDashboard = () => {
     try {
       await api.post('/coach/accept-client', { clientId });
       setMessage('Client accepted!');
-      setPendingClients(prev => prev.filter(c => c.clientId._id !== clientId));
+      setPendingClients(prev => prev.filter(c => c.clientId._id == clientId));
     } catch {
       setMessage('Failed to accept client');
     }
@@ -33,10 +33,10 @@ const CoachDashboard = () => {
   if (!request || !request.clientId) return null;
 
   return (
-    <div key={request._id} className="request-card">
+    <div key={request.clientId.id} className="request-card">
       <h3>{request.clientId.name}</h3>
       <p>{request.clientId.email}</p>
-      <button onClick={() => handleAccept(request._id)}>Accept</button>
+      <button onClick={() => handleAccept(request.clientId._id)}>Accept</button>
     </div>
     );
   }))

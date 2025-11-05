@@ -5,8 +5,7 @@ const ClientProfile = require('../models/ClientProfile');
 const getPendingClients = async (req, res) => {
     try{
         const coachId = req.user.id;
-        const getPendingClients = await ClientProfile.find({ coachId, status:'pending'})
-        .populate('clientId', 'name email'); //populate basic client info
+        const getPendingClients = await ClientProfile.find({ coachId: coachId, status:'pending'});
 
         res.json(getPendingClients);
     } catch (err) {
