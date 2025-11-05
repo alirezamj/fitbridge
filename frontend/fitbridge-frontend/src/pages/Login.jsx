@@ -17,19 +17,14 @@ const Login = () => {
     try {
       const res = await api.post('/api/auth/login', form);
       const token = res.data.token
-      login(token);
-
+      
       const decoded = jwtDecode(token);
-      console.log('Decoded token:', decoded);
+
+      login(token, decoded);
+      
       const role = decoded.role;
 
-      if(role === 'client') {
-        navigate('/client/onboarding');
-      } else if (role === 'coach') {
-        navigate('/coach/dashboard');
-      } else {
-        setError('Unknown role');
-      }
+      navigate('/');
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed');
     }

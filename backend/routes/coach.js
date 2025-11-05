@@ -5,7 +5,7 @@ const authMiddleware = require('../middlewares/authMiddleware.js');
 
 
 const coachOnly = (req, res, next) => {
-    if (req.user.role === 'coach') return res.status(403).json({ error: 'Access denied'});
+    if (!req.user.role === 'coach') return res.status(403).json({ error: 'Access denied'});
     next();
 };
 

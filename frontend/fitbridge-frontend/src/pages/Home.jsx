@@ -2,14 +2,19 @@ import { Link } from 'react-router-dom';
 import Layout from '../layout/Layout';
 import Hero from '../components/Hero';
 import Features from '../components/Features';
+import { AuthContext } from '../context/AuthContext';
+import { useContext } from 'react';
+import { useState , useEffect } from 'react';
 import './Home.css';
 
-import { useState , useEffect } from 'react';
 
 
 
 export default function Home() {
-const token = localStorage.getItem('token');
+const { token, user } = useContext(AuthContext);
+const tokens = localStorage.getItem('token');
+console.log("User:", user);
+console.log("Token:", token);
 
 const quotes = [
   "Every rep counts 💪",
@@ -25,6 +30,7 @@ useEffect(() => {
   }, 3000);
   return () => clearInterval(interval);
 }, []);
+            console.log("User from context:", user);
 
   return (
    <Layout>
@@ -41,7 +47,15 @@ useEffect(() => {
            <Link to="/register" className="btn btn-secondary">Sign Up</Link>
          </div>
          ) : (
-            <Link to="/dashboard" className="btn">Go to Dashboard</Link>
+          <>
+            <Link to="/coach/dashboard" className="btn">Go to Dashboard</Link>
+            {user?.role === "client" && (
+                          <Link to="/client/onBoarding" className="btn btn-secondary">Go to board</Link>
+            )}
+            {user?.role === "coach" && (
+                          <Link to="/coach/..." className="btn btn-secondary">Go to List</Link>
+            )}
+          </>
          )}
        </header>
      </div>

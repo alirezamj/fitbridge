@@ -87,5 +87,29 @@ const getClientStats = async (req, res) => {
 };
 
 
+const getClientProfile = async (req , res) => {
+  try{
+    const clientId = req.user.id;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
+    const skip = (page - 1) * limit;
 
-module.exports = { submitProfile, getAssignedCoach, getCoaches, getClientStats};
+    const total = await ClientProfile.countDocuments({ clientId });
+    const profiles = await ClientProfile.find({ clientId })
+    .populate('coachId', 'name specialty')
+    .sort({ createAt: -1 })
+    .skip(skip)
+    .limit(limit);
+
+    res.json({ 
+      profiles,
+      totalPages: Math.ceil(total / limit),
+      currentPage: page
+     });
+  } catch (err) {
+    res.stats(500).json({ error: 'Failed to fetch profiles'});
+  }
+};
+
+
+module.exports = { submitProfile, getAssignedCoach, getCoaches, getClientStats, getClientProfile};

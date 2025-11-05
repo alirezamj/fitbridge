@@ -29,14 +29,18 @@ const CoachDashboard = () => {
       {pendingClients.length === 0 ? (
         <p>No pending requests</p>
       ) : (
-        pendingClients.map(({ clientId }) => (
-          <div key={clientId._id} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
-            <h3>{clientId.name}</h3>
-            <p>{clientId.email}</p>
-            <button onClick={() => handleAccept(clientId._id)}>Accept</button>
-          </div>
-        ))
-      )}
+        pendingClients.map((request) => {
+  if (!request || !request.clientId) return null;
+
+  return (
+    <div key={request._id} className="request-card">
+      <h3>{request.clientId.name}</h3>
+      <p>{request.clientId.email}</p>
+      <button onClick={() => handleAccept(request._id)}>Accept</button>
+    </div>
+    );
+  }))
+}
     </div>
   );
 };

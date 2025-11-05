@@ -4,8 +4,8 @@ const ClientProfile = require('../models/ClientProfile');
 //Get /api/coach/requests
 const getPendingClients = async (req, res) => {
     try{
-        const coachID = req.user.id;
-        const getPendingClients = await ClientProfile.find({ coachID, status:'pending'})
+        const coachId = req.user.id;
+        const getPendingClients = await ClientProfile.find({ coachId, status:'pending'})
         .populate('clientId', 'name email'); //populate basic client info
 
         res.json(getPendingClients);
