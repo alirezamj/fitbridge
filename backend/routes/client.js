@@ -6,7 +6,8 @@ const {
     getAssignedCoach, 
     getCoaches, 
     getClientStats,
-    getClientProfile
+    getClientProfile,
+    getTrainingPlan
  } = require('../controllers/clientController');
 
 
@@ -28,5 +29,7 @@ router.get('/coachs', authMiddleware, getCoaches);
 router.get('/stats', authMiddleware, getClientStats);
 
 
+//GET /api/client/get-training-plans
+router.get('/get-training-plans', authMiddleware, getTrainingPlan);
 
 module.exports = router;

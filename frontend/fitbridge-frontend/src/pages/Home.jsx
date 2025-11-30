@@ -13,8 +13,8 @@ import './Home.css';
 export default function Home() {
 const { token, user } = useContext(AuthContext);
 const tokens = localStorage.getItem('token');
-console.log("User:", user);
-console.log("Token:", token);
+// console.log("User:", user);
+// console.log("Token:", token);
 
 const quotes = [
   "Every rep counts 💪",
@@ -48,13 +48,22 @@ useEffect(() => {
          </div>
          ) : (
           <>
-            <Link to="/coach/dashboard" className="btn">Go to Dashboard</Link>
-            {user?.role === "client" && (
-                          <Link to="/client/onBoarding" className="btn btn-secondary">Go to board</Link>
-            )}
-            {user?.role === "coach" && (
-                          <Link to="/coach/..." className="btn btn-secondary">Go to List</Link>
-            )}
+
+          <>
+  {user?.role === "client" && (
+    <Link to="/client/dashboard" className="btn">Go to Dashboard</Link>
+  )}
+  {user?.role === "coach" && (
+    <Link to="/coach/dashboard" className="btn">Go to Dashboard</Link>
+  )}
+
+  {user?.role === "client" && (
+    <Link to="/client/onBoarding" className="btn btn-secondary">Go to board</Link>
+  )}
+  {user?.role === "coach" && (
+    <Link to="/coach/clients" className="btn btn-secondary">Go to List</Link>
+  )}
+</>
           </>
          )}
        </header>

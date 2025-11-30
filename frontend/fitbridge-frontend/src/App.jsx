@@ -9,6 +9,10 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import CoachDashboard from './pages/CoachDashboard';
 import ClientOnboarding from './pages/ClientOnboarding';
+import CoachList from './pages/CoachList';
+import ClientDetails from './pages/ClientDetails';
+import { ToastContainer } from 'react-toastify';
+
 
 
 
@@ -45,8 +49,19 @@ export default function App() {
             </PrivateRoute>
            }
            />
+           <Route
+           path="/coach/clients"
+           element={
+            <PrivateRoute allowedRoles={['coach']}>
+              <CoachList/>
+            </PrivateRoute>
+           }
+           />
            <Route path="/client/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+           <Route path="/clients/:id" element={<ClientDetails/>} />
         </Routes>
+        <ToastContainer>
+        </ToastContainer>
       </AuthProvider>
     </BrowserRouter>
 

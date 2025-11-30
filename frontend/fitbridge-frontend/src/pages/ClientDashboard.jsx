@@ -6,6 +6,27 @@ const ClientDashboard = () => {
   const [coach, setCoach] = useState(null);
   const [status, setStatus] = useState('');
   const [message, setMessage] = useState('');
+  const [plans, setPlans] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+
+  useEffect(() => {
+  const fetchPlans = async () => {
+    try {
+      const res = await api.get('/client/get-training-plans'); 
+      console.log('Training plans response:', res.data);
+      setPlans(Array.isArray(res.data) ? res.data : [res.data]);
+    } catch (err) {
+      console.error('Error fetching training plans:', err);
+      setError('Failed to load training plans');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchPlans();
+}, []);
 
   useEffect(() => {
     api.get('/client/coach')
@@ -17,6 +38,7 @@ const ClientDashboard = () => {
   }, []);
 
   return (
+    <>
     <div>
       <h2>Client Dashboard</h2>
       {message && <p>{message}</p>}
@@ -31,6 +53,40 @@ const ClientDashboard = () => {
         </div>
       )}
     </div>
+
+    {loading ? (
+      <p>Loading training plans...</p>
+       ) : error ? (
+      <p className="text-red-500">{error}</p>
+       ) : plans.length === 0 ? (
+      <p>No training plans found.</p>
+       ) : (
+      <div className="space-y-4">
+      {plans.map((plan) => (
+        <div key={plan.id} className="border p-4 rounded shadow">
+        <h3 className="text-lg font-semibold">{plan.title}</h3>
+        <p className="text-sm text-gray-600">{plan.notes}</p>
+        <ul className="mt-2 list-disc pl-5">
+           {plan.sessions.map((session, index) => (
+             <li key={index}>
+               <strong>{session.day}:</strong> {session.exercises.join(', ')}
+             </li>
+            ))}
+          </ul>
+        </div>
+       ))}
+    </div>
+   )} 
+
+   <button
+  onClick={() => window.location.reload()}
+  className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+>
+  Refresh Plans
+</button>
+
+    </>
+    
   );
 };
 

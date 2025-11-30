@@ -1,5 +1,6 @@
 // controllers/clientController.js
 const ClientProfile = require('../models/ClientProfile');
+const trainingPlan = require('../models/TrainingPlan');
 const User = require('../models/User');
 
 
@@ -112,4 +113,25 @@ const getClientProfile = async (req , res) => {
 };
 
 
-module.exports = { submitProfile, getAssignedCoach, getCoaches, getClientStats, getClientProfile};
+const getTrainingPlan = async (req, res) => {
+  try {
+    const clientId = req.user.id;
+    const plan = await trainingPlan.find({ clientId });
+
+        if (!plan) {
+      return res.status(404).json({ error: 'Training-plan not found' });
+    }
+    res.status(200).json(plan);
+  } catch (err) {
+    console.error('Error fetching Training plan', err);
+    res.status(500).json({ error: 'Failed to fetch stats' });
+  }
+}
+
+module.exports = { submitProfile, 
+  getAssignedCoach, 
+  getCoaches, 
+  getClientStats, 
+  getClientProfile,
+  getTrainingPlan
+};

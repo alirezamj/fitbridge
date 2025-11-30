@@ -1,29 +1,48 @@
 import { useEffect, useState } from 'react';
-import api from '../apiClient';
 import { useNavigate } from 'react-router-dom';
+import api from '../apiClient';
+import './CoachList.css';
+import RightMenu from './RightMenu'; // adjust path if needed
 
 const CoachList = () => {
-  const [coaches, setCoaches] = useState([]);
   const navigate = useNavigate();
+  const [clients, setClients] = useState([]);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
-    api.get('/coaches').then(res => setCoaches(res.data));
+    api
+      .get('/coach/accepted')
+      .then((res) => setClients(res.data))
+      .catch(() => setMessage('Failed to load accepted clients'));
   }, []);
 
-  const handleSelect = (coachId) => {
-    navigate('/client/onboarding', { state: { coachId } });
-  };
-
   return (
-    <div>
-      <h2>Select a Coach</h2>
-      {coaches.map(coach => (
-        <div key={coach._id}>
-          <h3>{coach.name}</h3>
-          <p>{coach.specialty}</p>
-          <button onClick={() => handleSelect(coach._id)}>Select</button>
+    <div className="flex h-screen m-0 p-0">
+      {/* Main content */}
+      <div className="flex-1 bg-white overflow-y-auto m-0 p-0">
+        <h1 className="text-2xl font-bold mb-4">Coach Dashboard</h1>
+        {message && <p className="text-red-500">{message}</p>}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {clients.map((client) => (
+            <div
+              key={client.id}
+              className="bg-white border rounded shadow p-4 hover:shadow-md transition"
+            >
+              <h3 className="text-lg font-semibold">{client.age}</h3>
+              <p>{client.goals}</p>
+              <button
+                onClick={() => navigate(`/clients/${client._id}`)}
+                className="mt-2 text-blue-600 hover:underline"
+              >
+                View Details
+              </button>
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
+
+      {/* Right-side menu */}
+      <RightMenu />
     </div>
   );
 };

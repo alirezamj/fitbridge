@@ -46,7 +46,7 @@ const ClientOnboarding = () => {
    }, [user]);
 
    useEffect(() => {
-    api.get('/client/profiles')
+    api.get('/client/profile')
     .then(res => setProfiles(res.data.profiles))
     .catch(err => console.error('Failed to fetch profiles', err));
    }, []);
@@ -70,7 +70,6 @@ useEffect(() => {
 
   
 
-  const selectedCoach = coaches.find(c => c._id === selectedCoachId);
 
 
   const handleSubmit = async (e) => {
